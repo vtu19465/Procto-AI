@@ -1,0 +1,45 @@
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build directories
+build/
+dist/
+
+# React specific
+*.env
+*.log
+*.lock
+/public/static/
+
+# Express specific
+logs/
+*.pid
+*.seed
+
+# MongoDB specific
+/data/db/
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Miscellaneous
+*.tgz
+*.zip
+*.tar
+*.gz
+
+# Temporary files
+temp/
+tmp/
