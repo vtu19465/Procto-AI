@@ -11,7 +11,7 @@ exports.validateLogin = [
     .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
   body('userType')
     .notEmpty().withMessage('User type is required')
-    .isIn(['admin', 'user', 'student']).withMessage('User type must be either "admin" or "user"'),
+    .isIn(['admin', 'faculty', 'student']).withMessage('User type must be either "admin" or "user"'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -14,7 +15,7 @@ const LoginForm = () => {
   const [emailForReset, setEmailForReset] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
+  const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
     console.log('Logging in as:', { username, password, userType });
@@ -31,6 +32,7 @@ const LoginForm = () => {
         setUsername('');
         setPassword('');
         setUserType('student');
+        navigate(`/${response.data.userType}`);
       }
     } catch (err) {
       setErrorMessage('Login failed. Please try again.');
