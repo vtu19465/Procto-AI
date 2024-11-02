@@ -8,7 +8,7 @@ build/
 dist/
 
 # React specific
-# *.env
+*.env
 *.log
 *.lock
 /public/static/
