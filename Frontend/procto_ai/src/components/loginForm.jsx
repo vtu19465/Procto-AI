@@ -29,6 +29,10 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         alert('Login successful!');
+        localStorage.setItem("creds",JSON.stringify({
+          username : username,
+          userrole : userType
+        }))
         setUsername('');
         setPassword('');
         setUserType('student');

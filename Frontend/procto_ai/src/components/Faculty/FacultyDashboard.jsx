@@ -1,97 +1,75 @@
-// src/components/FacultyDashboard.jsx
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import AddAssessmentIcon from '../../assets/add-assessment.svg';
+import ViewAssessmentIcon from '../../assets/view-assessment.svg';
+import StudentListIcon from '../../assets/student-list.svg';
 
-const FacultyDashboard = () => {
-  const [title, setTitle] = useState('');
-  const [dueDate, setDueDate] = useState('');
-  const [questions, setQuestions] = useState([{ questionText: '', options: ['', '', '', ''], correctAnswer: '' }]);
+function FacultyDashboard() {
+  const navigate = useNavigate();
 
-  const addQuestion = () => {
-    setQuestions([...questions, { questionText: '', options: ['', '', '', ''], correctAnswer: '' }]);
-  };
-
-  const handleQuestionChange = (index, field, value) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index][field] = value;
-    setQuestions(updatedQuestions);
-  };
-
-  const handleOptionChange = (questionIndex, optionIndex, value) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[questionIndex].options[optionIndex] = value;
-    setQuestions(updatedQuestions);
-  };
-
-  const handleSubmit = async () => {
-    try {
-      await axios.post('http://localhost:3000/api/assessments', {
-        title,
-        dueDate,
-        questions,
-      });
-      alert('Assessment created successfully');
-    } catch (error) {
-      console.error('Error creating assessment:', error);
-    }
+  // Navigation handlers
+  const handleCreateAssessment = () => navigate('/create-assessment');
+  const handleViewAssessments = () => navigate('/view-assessments');
+  const handleStudentList = () => navigate('/student-list');
+  const handleProfile = () => navigate('/profile');
+  const handleHome = () => navigate('/');
+  const handleLogout = () => {
+    localStorage.removeItem("creds");
+    navigate('/');
+    console.log("Logged out");
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Faculty Dashboard - Create Assessment</h2>
-      <input
-        type="text"
-        placeholder="Assessment Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="form-control my-2"
-      />
-      <input
-        type="date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-        className="form-control my-2"
-      />
-
-      <h4>Questions</h4>
-      {questions.map((question, questionIndex) => (
-        <div key={questionIndex} className="card my-3 p-3">
-          <input
-            type="text"
-            placeholder="Question Text"
-            value={question.questionText}
-            onChange={(e) => handleQuestionChange(questionIndex, 'questionText', e.target.value)}
-            className="form-control mb-2"
-          />
-          <h6>Options:</h6>
-          {question.options.map((option, optionIndex) => (
-            <input
-              key={optionIndex}
-              type="text"
-              placeholder={`Option ${optionIndex + 1}`}
-              value={option}
-              onChange={(e) => handleOptionChange(questionIndex, optionIndex, e.target.value)}
-              className="form-control my-1"
-            />
-          ))}
-          <input
-            type="text"
-            placeholder="Correct Answer"
-            value={question.correctAnswer}
-            onChange={(e) => handleQuestionChange(questionIndex, 'correctAnswer', e.target.value)}
-            className="form-control mt-2"
-          />
+    <div className="min-h-screen bg-gray-100">
+      {/* Navbar */}
+      <nav className="bg-blue-600 p-4 shadow-md">
+        <div className="container mx-auto flex justify-between items-center">
+          <div>
+            <button onClick={handleHome} className="text-white text-lg font-semibold">
+              Faculty Dashboard
+            </button>
+          </div>
+          <div className="space-x-4">
+            <button onClick={handleProfile} className="text-white">Profile</button>
+            <button onClick={handleLogout} className="text-white">Logout</button>
+          </div>
         </div>
-      ))}
+      </nav>
 
-      <button className="btn btn-secondary mt-2" onClick={addQuestion}>
-        Add Question
-      </button>
-      <button className="btn btn-primary mt-3" onClick={handleSubmit}>
-        Create Assessment
-      </button>
+      {/* Dashboard Cards */}
+      <div className="container mx-auto py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Create Assessment */}
+        <div
+          onClick={handleCreateAssessment}
+          className="bg-white shadow-lg rounded-lg p-6 text-center cursor-pointer transform transition duration-300 hover:bg-blue-50 hover:shadow-2xl hover:scale-105"
+        >
+          <img src={AddAssessmentIcon} alt="Create Assessment" className="mx-auto mb-4 h-16 w-16" />
+          <h3 className="text-xl font-semibold text-gray-700">Create Assessment</h3>
+          <p className="mt-2 text-gray-500">Set up new assessments for students.</p>
+        </div>
+
+        {/* View Assessments */}
+        <div
+          onClick={handleViewAssessments}
+          className="bg-white shadow-lg rounded-lg p-6 text-center cursor-pointer transform transition duration-300 hover:bg-blue-50 hover:shadow-2xl hover:scale-105"
+        >
+          <img src={ViewAssessmentIcon} alt="View Assessments" className="mx-auto mb-4 h-16 w-16" />
+          <h3 className="text-xl font-semibold text-gray-700">View Assessments</h3>
+          <p className="mt-2 text-gray-500">Check existing assessments and results.</p>
+        </div>
+
+        {/* Student List */}
+        <div
+          onClick={handleStudentList}
+          className="bg-white shadow-lg rounded-lg p-6 text-center cursor-pointer transform transition duration-300 hover:bg-blue-50 hover:shadow-2xl hover:scale-105"
+        >
+          <img src={StudentListIcon} alt="Student List" className="mx-auto mb-4 h-16 w-16" />
+          <h3 className="text-xl font-semibold text-gray-700">Student List</h3>
+          <p className="mt-2 text-gray-500">Manage students and view their performance.</p>
+        </div>
+      </div>
     </div>
   );
-};
+}
 
 export default FacultyDashboard;
