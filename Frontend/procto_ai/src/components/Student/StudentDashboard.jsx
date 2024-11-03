@@ -1,9 +1,52 @@
-import React from 'react'
+// src/components/StudentDashboard.jsx
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import StudentNavbar from './StudentNavbar'; // Import the new navbar component
 
 const StudentDashboard = () => {
-  return (
-    <div className='Man'>studentDashboard</div>
-  )
-}
+  const [assessments, setAssessments] = useState([]);
+  const [profile, setProfile] = useState({ name: 'Student Name', email: 'student@example.com' }); // Mock profile data
+  const navigate = useNavigate();
 
-export default StudentDashboard
+  useEffect(() => {
+    const fetchAssessments = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/assessments');
+        setAssessments(response.data);
+      } catch (error) {
+        console.error('Error fetching assessments:', error);
+      }
+    };
+
+    fetchAssessments();
+  }, []);
+
+  const handleTakeAssessment = (assessmentId) => {
+    navigate(`/assessment/${assessmentId}`);
+  };
+
+  return (
+    <div>
+      {/* Navbar */}
+      <StudentNavbar profile={profile} />
+
+      {/* Main Content */}
+      <div className="container mt-5">
+        <h2>Take Assessment</h2>
+        <ul className="list-group mt-3">
+          {assessments.map((assessment) => (
+            <li key={assessment.id} className="list-group-item d-flex justify-content-between align-items-center">
+              {assessment.title} - Due: {new Date(assessment.dueDate).toLocaleDateString()}
+              <button className="btn btn-primary" onClick={() => handleTakeAssessment(assessment.id)}>
+                Start Assessment
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default StudentDashboard;
