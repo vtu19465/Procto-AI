@@ -1,14 +1,17 @@
 // src/components/TakeAssessmentPage.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import SpeechDetection from '../SpeechDetection'; // Import SpeechDetection component
 
 const AssessmentPage = () => {
   const { assessmentId } = useParams();
   const [assessment, setAssessment] = useState(null);
   const [answers, setAnswers] = useState({});
   const [profile, setProfile] = useState(null);
+  const [isSpeechDetectionActive, setIsSpeechDetectionActive] = useState(false); // State for speech detection
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchAssessment = async () => {
       try {
@@ -33,10 +36,7 @@ const AssessmentPage = () => {
         
         setProfile(response.data);
       } catch (err) {
-        setError('Failed to fetch profile');
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -63,7 +63,13 @@ const AssessmentPage = () => {
     }
     navigate('/student');
   };
-  
+
+  // Start speech detection when the assessment loads
+  useEffect(() => {
+    if (assessment) {
+      setIsSpeechDetectionActive(true); // Activate speech detection
+    }
+  }, [assessment]);
 
   if (!assessment) return <p className="text-center mt-10 text-gray-500">Loading...</p>;
 
@@ -71,6 +77,17 @@ const AssessmentPage = () => {
     <div className="container mx-auto mt-10 bg-white p-6 rounded shadow-md">
       <h2 className="text-2xl font-semibold text-gray-700 mb-4">{assessment.title}</h2>
       <p className="text-gray-600 mb-8">Due Date: {new Date(assessment.dueDate).toLocaleDateString()}</p>
+
+      {/* Render Speech Detection if active */}
+      {isSpeechDetectionActive && (
+        <SpeechDetection 
+          onWarning={(message) => alert(message)} 
+          onAutoSubmit={() => {
+            alert('Your assessment has been auto-submitted due to noise interference.');
+            navigate('/submission-page');
+          }} 
+        />
+      )}
 
       <div className="space-y-6">
         {assessment.questions.map((question, index) => (

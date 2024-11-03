@@ -15,7 +15,9 @@ const LoginForm = () => {
   const [emailForReset, setEmailForReset] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
+
   const handleLogin = async (e) => {
     e.preventDefault();
     console.log('Logging in as:', { username, password, userType });
@@ -29,10 +31,10 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         alert('Login successful!');
-        localStorage.setItem("creds",JSON.stringify({
-          username : username,
-          userrole : userType
-        }))
+        localStorage.setItem("creds", JSON.stringify({
+          username: username,
+          userrole: userType,
+        }));
         setUsername('');
         setPassword('');
         setUserType('student');
@@ -47,7 +49,9 @@ const LoginForm = () => {
       setUserType('student');
     }
   };
+
   const fetchProfile = async () => {
+    setLoading(true); // Set loading to true before the request
     try {
       const username = JSON.parse(localStorage.getItem('creds'));
 
@@ -55,15 +59,15 @@ const LoginForm = () => {
         username: username.username,
       });
       
-      localStorage.setItem("u_id",response.data.id);
+      localStorage.setItem("u_id", response.data.id);
     } catch (err) {
-      setError('Failed to fetch profile');
+      setErrorMessage('Failed to fetch profile');
       console.error(err);
     } finally {
-      
-      setLoading(false);
+      setLoading(false); // Set loading to false after the request
     }
   };
+
   const handlePasswordReset = async (e) => {
     e.preventDefault();
     console.log('Password reset request for:', emailForReset);
@@ -141,6 +145,7 @@ const LoginForm = () => {
       <div className="background">
         <div className="col-md-6">
           {errorMessage && <div className="error-message">{errorMessage}</div>}
+          {loading && <div>Loading...</div>} {/* Show loading message */}
           <div className="card">
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Login</h2>
@@ -227,6 +232,7 @@ const LoginForm = () => {
         </div>
       </div>
 
+      {/* Forgot Password Modal */}
       {showForgotPassword && (
         <div className="overlay">
           <div className="card">
@@ -261,12 +267,24 @@ const LoginForm = () => {
         </div>
       )}
 
+      {/* Create Account Modal */}
       {showCreateAccount && (
         <div className="overlay">
-          <div className="card full-screen-overlay">
+          <div className="card">
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Create Account</h2>
               <form onSubmit={handleCreateAccount}>
+                <div className="form-group">
+                  <label htmlFor="newUsername">Username</label>
+                  <input
+                    type="text"
+                    id="newUsername"
+                    className="form-control"
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    required
+                  />
+                </div>
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
                   <input
@@ -289,45 +307,7 @@ const LoginForm = () => {
                     required
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="newUsername">Username</label>
-                  <input
-                    type="text"
-                    id="newUsername"
-                    className="form-control"
-                    value={newUsername}
-                    onChange={(e) => setNewUsername(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="newPassword">Password</label>
-                  <input
-                    type="password"
-                    id="newPassword"
-                    className="form-control"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>User Type</label>
-                  <div className="btn-group btn-group-toggle d-flex justify-content-center">
-                    {['student', 'faculty', 'admin'].map((type) => (
-                      <label key={type} className={`btn btn-outline-primary flex-fill ${userType === type ? 'active' : ''}`}>
-                        <input
-                          type="radio"
-                          name="userType"
-                          value={type}
-                          checked={userType === type}
-                          onChange={() => setUserType(type)}
-                        /> {type.charAt(0).toUpperCase() + type.slice(1)}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <button type="submit" className="btn btn-success btn-block">
+                <button type="submit" className="btn btn-primary btn-block">
                   Create Account
                 </button>
               </form>
