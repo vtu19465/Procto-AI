@@ -8,5 +8,7 @@ router.post('/assessments', assessmentController.createAssessment);
 
 // Route to get all assessments
 router.get('/assessments', assessmentController.getAssessments);
+router.get('/assessments/:assessmentId', assessmentController.getAssessmentById);
+router.post('/assessments/:assessmentId/submit', assessmentController.submitAssessment);
 
 module.exports = router;

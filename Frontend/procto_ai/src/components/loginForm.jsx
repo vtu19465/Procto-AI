@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -37,6 +37,7 @@ const LoginForm = () => {
         setPassword('');
         setUserType('student');
         navigate(`/${response.data.userType}`);
+        fetchProfile();
       }
     } catch (err) {
       setErrorMessage('Login failed. Please try again.');
@@ -46,7 +47,23 @@ const LoginForm = () => {
       setUserType('student');
     }
   };
+  const fetchProfile = async () => {
+    try {
+      const username = JSON.parse(localStorage.getItem('creds'));
 
+      const response = await axios.post('http://localhost:3000/api/users', {
+        username: username.username,
+      });
+      
+      localStorage.setItem("u_id",response.data.id);
+    } catch (err) {
+      setError('Failed to fetch profile');
+      console.error(err);
+    } finally {
+      
+      setLoading(false);
+    }
+  };
   const handlePasswordReset = async (e) => {
     e.preventDefault();
     console.log('Password reset request for:', emailForReset);
