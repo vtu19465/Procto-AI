@@ -1,49 +1,56 @@
 // src/components/StudentDashboard.jsx
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import StudentNavbar from './StudentNavbar'; // Import the new navbar component
+import StudentNavbar from './StudentNavbar';
+import TakeAssessmentIcon from '../../assets/take-assessment.svg';
+import AssessmentHistoryIcon from '../../assets/assessment-history.svg';
+import DiscussionForumIcon from '../../assets/discussion.svg';
 
 const StudentDashboard = () => {
-  const [assessments, setAssessments] = useState([]);
-  const [profile, setProfile] = useState({ name: 'Student Name', email: 'student@example.com' }); // Mock profile data
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchAssessments = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/assessments');
-        setAssessments(response.data);
-      } catch (error) {
-        console.error('Error fetching assessments:', error);
-      }
-    };
+  // Navigation handlers for each card
+  const handleTakeAssessment = () => navigate('/take-assessment');
+  const handleAssessmentHistory = () => navigate('/assessment-history');
+  const handleDiscussionForum = () => navigate('/discussion-forum');
 
-    fetchAssessments();
-  }, []);
-
-  const handleTakeAssessment = (assessmentId) => {
-    navigate(`/assessment/${assessmentId}`);
-  };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100">
       {/* Navbar */}
-      <StudentNavbar profile={profile} />
+      <StudentNavbar />
 
-      {/* Main Content */}
-      <div className="container mt-5">
-        <h2>Take Assessment</h2>
-        <ul className="list-group mt-3">
-          {assessments.map((assessment) => (
-            <li key={assessment.id} className="list-group-item d-flex justify-content-between align-items-center">
-              {assessment.title} - Due: {new Date(assessment.dueDate).toLocaleDateString()}
-              <button className="btn btn-primary" onClick={() => handleTakeAssessment(assessment.id)}>
-                Start Assessment
-              </button>
-            </li>
-          ))}
-        </ul>
+      {/* Dashboard Cards */}
+      <div className="container mx-auto py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Take Assessment */}
+        <div
+          onClick={handleTakeAssessment}
+          className="bg-white shadow-lg rounded-lg p-6 text-center cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl"
+        >
+          <img src={TakeAssessmentIcon} alt="Take Assessment" className="w-16 h-16 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-700">Take Assessment</h3>
+          <p className="mt-2 text-gray-500">Start a new assessment.</p>
+        </div>
+
+        {/* Assessment History */}
+        <div
+          onClick={handleAssessmentHistory}
+          className="bg-white shadow-lg rounded-lg p-6 text-center cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl"
+        >
+          <img src={AssessmentHistoryIcon} alt="Assessment History" className="w-16 h-16 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-700">Assessment History</h3>
+          <p className="mt-2 text-gray-500">View completed assessments and scores.</p>
+        </div>
+
+        {/* Discussion Forum */}
+        <div
+          onClick={handleDiscussionForum}
+          className="bg-white shadow-lg rounded-lg p-6 text-center cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-xl"
+        >
+          <img src={DiscussionForumIcon} alt="Discussion Forum" className="w-16 h-16 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-700">Discussion Forum</h3>
+          <p className="mt-2 text-gray-500">Participate in discussions with peers.</p>
+        </div>
       </div>
     </div>
   );

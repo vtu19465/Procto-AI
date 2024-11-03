@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
 const assessmentRoutes = require('./routes/assessmentRoutes'); 
 const userRoutes = require('./routes/userRoutes');
+const submissionRoutes = require('./routes/submissionRoutes');
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(cors());
 app.use('/api', authRoutes); // Authentication routes
 app.use('/api', assessmentRoutes); // Assessment-related routes
 app.use('/api', userRoutes);
+app.use('/api', submissionRoutes);
 
 
 // Start Server

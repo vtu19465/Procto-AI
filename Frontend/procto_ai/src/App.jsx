@@ -9,7 +9,10 @@ import AddAssessmentComponent from './components/Faculty/AddAssessmentComponent'
 import ViewAssessmentsComponent from './components/Faculty/ViewAssessmentsComponent';
 import StudentListComponent from './components/Faculty/StudentListComponent';
 import ProfileComponent from './components/Faculty/ProfileComponent';
+import AssessmentPage from './components/Student/AssessmentPage';
+import TakeAssessmentComponent from './components/Student/TakeAssessmentComponent';
 import './App.css';
+import AssessmentHistoryComponent from './components/Student/AssessmentHistoryComponent';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -27,6 +30,12 @@ function App() {
           <Route path="/view-assessments" element={<ViewAssessmentsComponent />} />
           <Route path="/student-list" element={<StudentListComponent />} />
           <Route path="/profile" element={<ProfileComponent/>} />
+          <Route path="/assessment/:assessmentId" element={<AssessmentPage />} />
+          <Route path="/take-assessment" element={<TakeAssessmentComponent />} />
+          <Route path="/assessment-history" element={<AssessmentHistoryComponent />} />
+
+
+
 
         </Routes>
       </div>
