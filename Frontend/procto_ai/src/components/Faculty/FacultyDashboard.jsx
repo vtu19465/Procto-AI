@@ -14,7 +14,8 @@ function FacultyDashboard() {
   const handleProfile = () => navigate('/profile');
   const handleHome = () => navigate('/');
   const handleLogout = () => {
-    // Add logout logic here
+    localStorage.removeItem("creds");
+    navigate('/');
     console.log("Logged out");
   };
 
