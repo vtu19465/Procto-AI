@@ -5,7 +5,9 @@ const mongoose = require('mongoose');
 
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
-const assessmentRoutes = require('./routes/assessmentRoutes'); // Import assessment routes
+const assessmentRoutes = require('./routes/assessmentRoutes'); 
+const userRoutes = require('./routes/userRoutes');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +24,8 @@ app.use(cors());
 // Routes
 app.use('/api', authRoutes); // Authentication routes
 app.use('/api', assessmentRoutes); // Assessment-related routes
+app.use('/api', userRoutes);
+
 
 // Start Server
 app.listen(PORT, () => {
