@@ -1,4 +1,3 @@
-// src/components/AssessmentHistoryComponent.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -7,7 +6,6 @@ const AssessmentHistoryComponent = () => {
   const [submissions, setSubmissions] = useState([]);
 
   useEffect(() => {
-    // Fetch assessment history for the student
     const fetchAssessmentHistory = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/submissions/history/${studentId}`);

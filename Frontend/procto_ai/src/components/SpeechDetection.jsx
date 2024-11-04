@@ -1,22 +1,22 @@
-// src/components/SpeechDetection.jsx
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SpeechDetection = ({ onAutoSubmit }) => {
   const [isMicActive, setIsMicActive] = useState(false);
   const [speechDetected, setSpeechDetected] = useState(false);
   const [speechCount, setSpeechCount] = useState(0);
-  const [submitted, setSubmitted] = useState(false); // State to track if already submitted
+  const [submitted, setSubmitted] = useState(false);
 
-  // Set a higher threshold to reduce sensitivity
-  const volumeThreshold = 20.0; // Increase this to make it less sensitive to minor sounds
-  const detectionInterval = 1000; // Time in milliseconds between consecutive detections
+  const navigate = useNavigate();
+  const volumeThreshold = 20.0; 
+  const detectionInterval = 1000; 
 
   useEffect(() => {
     let audioContext;
     let analyser;
     let microphone;
     let javascriptNode;
-    let lastDetectionTime = 0; // Variable to track last detection time
+    let lastDetectionTime = 0;
 
     const startSpeechDetection = async () => {
       try {
@@ -43,7 +43,7 @@ const SpeechDetection = ({ onAutoSubmit }) => {
           if (volume > volumeThreshold && currentTime - lastDetectionTime > detectionInterval) {
             setSpeechDetected(true);
             setSpeechCount((prevCount) => prevCount + 1);
-            lastDetectionTime = currentTime; // Update the last detection time
+            lastDetectionTime = currentTime;
           } else {
             setSpeechDetected(false);
           }
@@ -65,17 +65,15 @@ const SpeechDetection = ({ onAutoSubmit }) => {
   }, []);
 
   useEffect(() => {
-    // Show warning if speech detected more than four times and not yet submitted
     if (!submitted && speechCount > 4) {
       alert("Warning: Please keep quiet during the assessment.");
     }
-
-    // Trigger auto-submit if speech detected more than ten times and not yet submitted
     if (!submitted && speechCount > 10) {
-      setSubmitted(true); // Prevent further submissions
-      onAutoSubmit(); // Call the auto-submit function
+      setSubmitted(true); 
+      onAutoSubmit(); 
+      navigate('/main'); 
     }
-  }, [speechCount, onAutoSubmit, submitted]);
+  }, [speechCount, onAutoSubmit, submitted, navigate]);
 
   return (
     <div>

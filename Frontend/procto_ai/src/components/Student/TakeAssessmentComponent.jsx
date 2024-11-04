@@ -1,14 +1,12 @@
-// src/components/StudentDashboard.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import StudentNavbar from './StudentNavbar'; // Import the new navbar component
+import StudentNavbar from './StudentNavbar';
 
 const TakeAssessmentComponent = () => {
   const [assessments, setAssessments] = useState([]);
-  const [profile, setProfile] = useState({ name: 'Student Name', email: 'student@example.com' }); // Mock profile data
+  const [profile, setProfile] = useState({ name: 'Student Name', email: 'student@example.com' });
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchAssessments = async () => {
       try {

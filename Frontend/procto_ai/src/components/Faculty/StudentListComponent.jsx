@@ -5,7 +5,6 @@ function StudentListComponent() {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    // Fetch users with the role of "student"
     const fetchStudents = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/users');

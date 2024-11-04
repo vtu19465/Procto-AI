@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Import necessary components for routing
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './components/loginForm';
 import Navbar from './components/navbar';
 import StudentDashboard from './components/Student/StudentDashboard';
@@ -22,8 +22,8 @@ function App() {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<LoginForm />} /> {/* Route for LoginForm */}
-          <Route path="/student" element={<StudentDashboard />} /> {/* Route for Dashboard */}
+          <Route path="/" element={<LoginForm />} /> 
+          <Route path="/student" element={<StudentDashboard />} /> 
           <Route path="/faculty" element={<FacultyDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/create-assessment" element={<AddAssessmentComponent />} />
@@ -33,6 +33,7 @@ function App() {
           <Route path="/assessment/:assessmentId" element={<AssessmentPage />} />
           <Route path="/take-assessment" element={<TakeAssessmentComponent />} />
           <Route path="/assessment-history" element={<AssessmentHistoryComponent />} />
+          
 
 
 

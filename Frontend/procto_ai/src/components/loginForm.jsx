@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ const LoginForm = () => {
   const [emailForReset, setEmailForReset] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -33,13 +33,13 @@ const LoginForm = () => {
         alert('Login successful!');
         localStorage.setItem("creds", JSON.stringify({
           username: username,
-          userrole: userType,
+          userrole: userType
         }));
         setUsername('');
         setPassword('');
         setUserType('student');
         navigate(`/${response.data.userType}`);
-        fetchProfile();
+        await fetchProfile(); // Ensure this is awaited
       }
     } catch (err) {
       setErrorMessage('Login failed. Please try again.');
@@ -51,20 +51,20 @@ const LoginForm = () => {
   };
 
   const fetchProfile = async () => {
-    setLoading(true); // Set loading to true before the request
+    setLoading(true); // Start loading
     try {
       const username = JSON.parse(localStorage.getItem('creds'));
 
       const response = await axios.post('http://localhost:3000/api/users', {
         username: username.username,
       });
-      
+
       localStorage.setItem("u_id", response.data.id);
     } catch (err) {
-      setErrorMessage('Failed to fetch profile');
+      setErrorMessage('Failed to fetch profile'); // Change from setError to setErrorMessage
       console.error(err);
     } finally {
-      setLoading(false); // Set loading to false after the request
+      setLoading(false); // Stop loading
     }
   };
 
@@ -145,7 +145,6 @@ const LoginForm = () => {
       <div className="background">
         <div className="col-md-6">
           {errorMessage && <div className="error-message">{errorMessage}</div>}
-          {loading && <div>Loading...</div>} {/* Show loading message */}
           <div className="card">
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Login</h2>
@@ -202,8 +201,8 @@ const LoginForm = () => {
                   </div>
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-block">
-                  Login
+                <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                  {loading ? 'Loading...' : 'Login'} {/* Button text changes based on loading state */}
                 </button>
               </form>
 
@@ -232,7 +231,6 @@ const LoginForm = () => {
         </div>
       </div>
 
-      {/* Forgot Password Modal */}
       {showForgotPassword && (
         <div className="overlay">
           <div className="card">
@@ -267,24 +265,12 @@ const LoginForm = () => {
         </div>
       )}
 
-      {/* Create Account Modal */}
       {showCreateAccount && (
         <div className="overlay">
-          <div className="card">
+          <div className="card full-screen-overlay">
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Create Account</h2>
               <form onSubmit={handleCreateAccount}>
-                <div className="form-group">
-                  <label htmlFor="newUsername">Username</label>
-                  <input
-                    type="text"
-                    id="newUsername"
-                    className="form-control"
-                    value={newUsername}
-                    onChange={(e) => setNewUsername(e.target.value)}
-                    required
-                  />
-                </div>
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
                   <input
@@ -307,7 +293,45 @@ const LoginForm = () => {
                     required
                   />
                 </div>
-                <button type="submit" className="btn btn-primary btn-block">
+                <div className="form-group">
+                  <label htmlFor="newUsername">Username</label>
+                  <input
+                    type="text"
+                    id="newUsername"
+                    className="form-control"
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="newPassword">Password</label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    className="form-control"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>User Type</label>
+                  <div className="btn-group btn-group-toggle d-flex justify-content-center">
+                    {['student', 'faculty', 'admin'].map((type) => (
+                      <label key={type} className={`btn btn-outline-primary flex-fill ${userType === type ? 'active' : ''}`}>
+                        <input
+                          type="radio"
+                          name="userType"
+                          value={type}
+                          checked={userType === type}
+                          onChange={() => setUserType(type)}
+                        /> {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <button type="submit" className="btn btn-success btn-block">
                   Create Account
                 </button>
               </form>

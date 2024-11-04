@@ -10,7 +10,6 @@ function ProfileComponent() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // Get the username from localStorage
         const username = JSON.parse(localStorage.getItem('creds'));
 
         const response = await axios.post('http://localhost:3000/api/users', {

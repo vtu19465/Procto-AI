@@ -1,11 +1,8 @@
-// src/components/StudentNavbar.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const StudentNavbar = () => {
   const navigate = useNavigate();
-
-  // Navigation handlers
   const handleProfile = () => navigate('/profile');
   const handleLogout = () => {
     localStorage.removeItem("creds");

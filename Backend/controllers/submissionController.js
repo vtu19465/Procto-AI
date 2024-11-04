@@ -1,4 +1,3 @@
-// controllers/submissionController.js
 const Submission = require('../models/Submission');
 
 exports.submitAnswers = async (req, res) => {
