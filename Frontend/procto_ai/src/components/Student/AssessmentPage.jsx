@@ -94,11 +94,11 @@ const AssessmentPage = () => {
               onWarning={(message) => alert(message)} 
               onAutoSubmit={() => {
                 alert('Your assessment has been auto-submitted due to noise interference.');
-                navigate('/submission-page');
+                handleSubmit(); // Call handleSubmit for auto-submission
               }} 
             />
           )}
-          <VideoMonitoring />
+          <VideoMonitoring onAutoSubmit={handleSubmit} /> {/* Pass handleSubmit to VideoMonitoring */}
 
           <div className="space-y-6 mt-6">
             {assessment.questions.map((question, index) => (
